@@ -16,8 +16,41 @@ namespace W25W10DisconnectedModel;
 /// </summary>
 public partial class MainWindow : Window
 {
+    Data data = new Data();
+    Crud crud = new Crud();
+
     public MainWindow()
     {
         InitializeComponent();
+    }
+
+    private void btnLoadAllProducts_Click(object sender, RoutedEventArgs e)
+    {
+        //grdProducts.ItemsSource = data.GetAllProducts().DefaultView;
+        grdProducts.ItemsSource = crud.GetAllProducts().DefaultView;
+    }
+
+    private void btnShowWindow2_Click(object sender, RoutedEventArgs e)
+    {
+        DataSetWithMultipleTables win2 = new DataSetWithMultipleTables();
+        win2.Show();
+    }
+
+    private void btnFind_Click(object sender, RoutedEventArgs e)
+    {
+        int id = int.Parse(txtId.Text);
+        var row = crud.GetProductById(id);
+
+        if (row != null)
+        {
+            txtName.Text = row["ProductName"].ToString();
+            txtPrice.Text = row["UnitPrice"].ToString();
+            txtQuantity.Text = row["UnitsInStock"].ToString();
+        }
+        else
+        {
+            txtName.Text = txtPrice.Text = txtQuantity.Text = "";
+            MessageBox.Show("Invalid ID. Please try again");
+        }
     }
 }
